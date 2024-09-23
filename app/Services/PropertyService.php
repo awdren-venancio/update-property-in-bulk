@@ -41,8 +41,7 @@ class PropertyService extends ApiService
 
             foreach ($imoveis as $codigo => $imovel) {
                 if (!in_array($codigo, ["total", "paginas", "pagina", "quantidade"]) && $codigo !== '') {
-
-                    $response = $this->updateProperty($codigo, DescricaoWebHelper::getTextByDay());
+                    $response = $this->updateProperty($codigo, DescricaoWebHelper::getTextByDay($imovel['DescricaoWeb']));
                     $response = $response->getBody();
                     $response = json_decode($response, true);
 
@@ -68,7 +67,7 @@ class PropertyService extends ApiService
             'pesquisa' => json_encode([
                 'fields' => ['Codigo', 'DescricaoWeb'],
                 // 'filter' => [
-                //     'Bairro' => ['Moema'],
+                //     'Bairro' => ['Centro'],
                 // ],
                 'order' => [
                     'Bairro' => 'asc',

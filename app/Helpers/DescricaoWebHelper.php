@@ -11,12 +11,12 @@ class DescricaoWebHelper
      * 
      * @return string
      */
-    public static function getTextByDay()
+    public static function getTextByDay(string $descricaoWebOrigin): string
     {
         $day = Carbon::now()->format('d');
 
         $array = [
-            1 => 'Localização privilegiada',
+            1 => 'Localização privilegiada.',
             2 => 'Morar bem nunca foi tão fácil.',
             3 => 'Descubra o prazer de viver em um dos bairros mais desejados da cidade.',
             4 => 'Imóvel em rua tranquila, com fácil acesso às principais vias da cidade.',
@@ -49,6 +49,12 @@ class DescricaoWebHelper
             31 => 'Aproveite essa oportunidade única.'
         ];
 
-        return $array[(int) $day];
+        foreach ($array as $value) {
+            $descricaoWebOrigin = str_replace($value, '', $descricaoWebOrigin);
+        }
+
+        $descricaoWebOrigin = trim($descricaoWebOrigin);
+
+        return $descricaoWebOrigin . ' ' . $array[(int) $day];
     }
 }
