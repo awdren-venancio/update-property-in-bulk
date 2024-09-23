@@ -49,7 +49,7 @@ class PropertyService extends ApiService
                     if ($response['status'] === 200) {
                         Log::info("Imóvel ID $codigo atualizado com sucesso.");
                     } else {
-                        $err = 'Erro status: ' . $response["status"] . ' - ' . $response['message'];
+                        $err = "Erro no imóvel $codigo: status: " . $response["status"] . ' - ' . $response['message'];
                         Log::info($err);
                     }
                     sleep(1);
