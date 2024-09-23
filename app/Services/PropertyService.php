@@ -35,25 +35,31 @@ class PropertyService extends ApiService
 
         $paginas = $imoveis['paginas'];
 
+        $allImoveis = [];
+
         for ($pag = 1; $pag <= $paginas; $pag++) {
             $params = static::getParamns($pag, 50);
             $imoveis = $this->listProperty($params);
 
             foreach ($imoveis as $codigo => $imovel) {
                 if (!in_array($codigo, ["total", "paginas", "pagina", "quantidade"]) && $codigo !== '') {
-                    $response = $this->updateProperty($codigo, DescricaoWebHelper::getTextByDay($imovel['DescricaoWeb']));
-                    $response = $response->getBody();
-                    $response = json_decode($response, true);
-
-                    if ($response['status'] === 200) {
-                        Log::info("Imóvel ID $codigo atualizado com sucesso.");
-                    } else {
-                        $err = "Erro no imóvel $codigo: status: " . $response["status"] . ' - ' . $response['message'];
-                        Log::info($err);
-                    }
-                    sleep(1);
+                    $allImoveis[$codigo] = $imovel;
                 }
             }
+        }
+
+        foreach ($allImoveis as $codigo => $imovel) {
+            $response = $this->updateProperty($codigo, DescricaoWebHelper::getTextByDay($imovel['DescricaoWeb']));
+            $response = $response->getBody();
+            $response = json_decode($response, true);
+
+            if ($response['status'] === 200 && $response['message'] === 'Ok') {
+                Log::info("Imóvel ID $codigo atualizado com sucesso.");
+            } else {
+                $err = "Erro no imóvel $codigo: status: " . $response["status"] . ' - ' . $response['message'];
+                Log::info($err);
+            }
+            sleep(1);
         }
 
         Log::info("Processamento finalizado.");
