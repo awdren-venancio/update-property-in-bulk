@@ -76,9 +76,9 @@ class PropertyService extends ApiService
             'showtotal' => 1,
             'pesquisa' => json_encode([
                 'fields' => ['Codigo', 'DescricaoWeb'],
-                'filter' => [
-                    'Codigo' => ['RMX1208', 'RMX1901', 'RMX1658'],
-                ],
+                // 'filter' => [
+                //     'Codigo' => ['RMX1208', 'RMX1901', 'RMX1658'],
+                // ],
                 'order' => [
                     'Bairro' => 'asc',
                 ],
