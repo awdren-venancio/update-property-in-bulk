@@ -55,7 +55,9 @@ class DescricaoWebHelper
 
         $descricaoWebOrigin = trim($descricaoWebOrigin);
 
-        if (str_ends_with($descricaoWebOrigin, '.'))
+        if (strlen($descricaoWebOrigin) === 0) {
+            $separator = '';
+        } else if (str_ends_with($descricaoWebOrigin, '.'))
             $separator = ' ';
         else
             $separator = '. ';
