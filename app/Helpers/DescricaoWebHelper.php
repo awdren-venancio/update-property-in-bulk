@@ -55,6 +55,11 @@ class DescricaoWebHelper
 
         $descricaoWebOrigin = trim($descricaoWebOrigin);
 
-        return $descricaoWebOrigin . ' ' . $array[(int) $day];
+        if (str_ends_with($descricaoWebOrigin, '.'))
+            $separator = ' ';
+        else
+            $separator = '. ';
+
+        return $descricaoWebOrigin . $separator . $array[(int) $day];
     }
 }

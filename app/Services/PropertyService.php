@@ -36,6 +36,7 @@ class PropertyService extends ApiService
         $paginas = $imoveis['paginas'];
 
         $allImoveis = [];
+        $contTotal = 0;
 
         for ($pag = 1; $pag <= $paginas; $pag++) {
             $params = static::getParamns($pag, 50);
@@ -44,19 +45,23 @@ class PropertyService extends ApiService
             foreach ($imoveis as $codigo => $imovel) {
                 if (!in_array($codigo, ["total", "paginas", "pagina", "quantidade"]) && $codigo !== '') {
                     $allImoveis[$codigo] = $imovel;
+                    $contTotal++;
                 }
             }
         }
 
+        $contParc = 0;
         foreach ($allImoveis as $codigo => $imovel) {
             $response = $this->updateProperty($codigo, DescricaoWebHelper::getTextByDay($imovel['DescricaoWeb']));
             $response = $response->getBody();
             $response = json_decode($response, true);
 
+            $contParc++;
+
             if ($response['status'] === 200 && $response['message'] === 'Ok') {
-                Log::info("Imóvel ID $codigo atualizado com sucesso.");
+                Log::info("$contParc de $contTotal - Imóvel ID $codigo atualizado com sucesso.");
             } else {
-                $err = "Erro no imóvel $codigo: status: " . $response["status"] . ' - ' . $response['message'];
+                $err = "$contParc de $contTotal - Erro no imóvel $codigo: status: " . $response["status"] . ' - ' . $response['message'];
                 Log::info($err);
             }
             sleep(1);
@@ -73,7 +78,7 @@ class PropertyService extends ApiService
             'pesquisa' => json_encode([
                 'fields' => ['Codigo', 'DescricaoWeb'],
                 // 'filter' => [
-                //     'Bairro' => ['Centro'],
+                //     'Codigo' => ['RMX1740', 'RMX1801'],
                 // ],
                 'order' => [
                     'Bairro' => 'asc',
