@@ -53,16 +53,14 @@ class PropertyService extends ApiService
         $contParc = 0;
         foreach ($allImoveis as $codigo => $imovel) {
             $response = $this->updateProperty($codigo, DescricaoWebHelper::getTextByDay($imovel['DescricaoWeb']));
-            $response = $response->getBody();
-            $response = json_decode($response, true);
 
             $contParc++;
 
             if ($response['status'] === 200 && $response['message'] === 'Ok') {
                 Log::info("$contParc de $contTotal - Imóvel ID $codigo atualizado com sucesso.");
             } else {
-                $err = "$contParc de $contTotal - Erro no imóvel $codigo: status: " . $response["status"] . ' - ' . $response['message'];
-                Log::info($err);
+                $err = "$contParc de $contTotal - Erro no imóvel $codigo - " . $response['message'];
+                Log::error($err);
             }
             sleep(1);
         }
@@ -77,9 +75,9 @@ class PropertyService extends ApiService
             'showtotal' => 1,
             'pesquisa' => json_encode([
                 'fields' => ['Codigo', 'DescricaoWeb'],
-                // 'filter' => [
-                //     'Codigo' => ['RMX1740', 'RMX1801'],
-                // ],
+                'filter' => [
+                    'Codigo' => ['213213836', '234'],
+                ],
                 'order' => [
                     'Bairro' => 'asc',
                 ],

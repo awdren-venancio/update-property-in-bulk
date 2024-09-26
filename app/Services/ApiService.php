@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
+use Log;
 
 class ApiService
 {
@@ -36,13 +37,24 @@ class ApiService
 
         $url = $this->baseUrl . $endpoint;
 
-        $response = Http::retry(3, 5000)
-            ->timeout(120)
-            ->withHeaders([
-                'Accept' => 'application/json'
-            ])->put($url, $params);
+        try {
+            $response = Http::retry(3, 5000)
+                ->timeout(120)
+                ->withHeaders([
+                    'Accept' => 'application/json'
+                ])->put($url, $params);
 
-        return $response;
+            $response = $response->getBody();
+            return json_decode($response, true);
+
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+
+            return [
+                'status' => 500,
+                'message' => $message
+            ];
+        }
     }
 
 
