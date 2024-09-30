@@ -30,6 +30,20 @@ class PropertyService extends ApiService
     public function startAutomation()
     {
 
+        $lockFile = "automation.lock";
+        $currentDay = date('Y-m-d');
+
+        if (file_exists($lockFile)) {
+            $lastExecutionDay = trim(file_get_contents($lockFile));
+
+            if ($lastExecutionDay == $currentDay) {
+                Log::info("Processo já foi executado hoje. Saindo...");
+                exit(1);
+            }
+        }
+
+        file_put_contents($lockFile, $currentDay);
+
         Log::info("Processamento iniciado.");
         $params = static::getParamns(1, 50);
         $imoveis = $this->listProperty($params);

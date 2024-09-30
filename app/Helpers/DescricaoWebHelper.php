@@ -55,12 +55,17 @@ class DescricaoWebHelper
 
         $descricaoWebOrigin = trim($descricaoWebOrigin);
 
+        if ($descricaoWebOrigin === '.') {
+            $descricaoWebOrigin = '';
+        }
+
         if (strlen($descricaoWebOrigin) === 0) {
             $separator = '';
-        } else if (str_ends_with($descricaoWebOrigin, '.'))
+        } else if (preg_match('/[[:punct:]]$/', $descricaoWebOrigin)) {
             $separator = ' ';
-        else
+        } else {
             $separator = '. ';
+        }
 
         return $descricaoWebOrigin . $separator . $array[(int) $day];
     }
