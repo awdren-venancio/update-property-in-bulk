@@ -88,13 +88,14 @@ class PropertyService extends ApiService
     {
         $params = [
             'showtotal' => 1,
+            'showInternal' => 1,
             'pesquisa' => json_encode([
                 'fields' => ['Codigo', 'DescricaoWeb'],
                 // 'filter' => [
                 //     'Codigo' => ['RMX1208', 'RMX1901', 'RMX1658'],
                 // ],
                 'order' => [
-                    'Bairro' => 'asc',
+                    'Codigo' => 'asc',
                 ],
                 'paginacao' => [
                     'pagina' => $pag,
